@@ -1,4 +1,8 @@
 package ap;
+
+// Author: Xiaoyu Chen 
+// Date:   11/8/2018
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
