@@ -47,12 +47,10 @@ public class FlexiRentSystem {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date aDate = null;
-		try {
-			 // 2018-08-01 with 2018-08-02; interval is 1;
-			aDate = sdf.parse(after);
+		try {	 
+			aDate = sdf.parse(after);// 2018-08-01 with 2018-08-02; interval is 1;
 		}
 		catch (ParseException e) {
-			// TODO: handle exception
 //			e.printStackTrace();
 			System.out.println("Date Formate is wrong. //checkDayIfBefore");
 			check = false;
@@ -150,7 +148,7 @@ public class FlexiRentSystem {
 				
 				System.out.println("Please enter the Street number:");
 				String strNum = console.nextLine();
-				try { int strNumInt = Integer.parseInt(strNum);} /// To check input value is valid.
+				try { Integer.parseInt(strNum);} /// To check input value is valid.
 				catch (NumberFormatException e) {	        	
 						System.out.println("*** The input format is error. ***");
 						continue;
@@ -167,15 +165,14 @@ public class FlexiRentSystem {
 				
 				System.out.println("Property type: if Apartment, enter 1 or if Premium Suite, enter 2");
 				String propertyType = console.nextLine();
-				int propertyTypeInt;
-				try { propertyTypeInt = Integer.parseInt(propertyType);} /// To check input value is valid.
+				try {  Integer.parseInt(propertyType);} /// To check input value is valid.
 				catch (NumberFormatException e) {	        	
 						System.out.println("*** The input format is error. ***");
 						continue;
 				}
-				if(propertyTypeInt == 1 || propertyTypeInt == 2) {
-					if(propertyTypeInt == 1) propertyType = "Apartment";
-					if(propertyTypeInt == 2) propertyType = "Premium Suite";
+				if(propertyType.equals("1")|| propertyType.equals("2") ) {
+					if(propertyType.equals("1")) propertyType = "Apartment";
+					if(propertyType.equals("2")) propertyType = "Premium Suite";
 				}
 				else {
 					System.out.println("*** The input format is error. ***");
@@ -299,7 +296,7 @@ public class FlexiRentSystem {
 				}
 				
 				existProperty = reProperty(propertyId); // find that property
-				if(existProperty.returnDate(returnDayTime)) { // true means return sccess
+				if(existProperty.returnDate(returnDayTime)) { // true means return success
 					if(existProperty instanceof Apartment) {
 						System.out.println(existProperty.getPropertyType()+" "+propertyId+" is returned by customer "+((Apartment)existProperty).getRentalRecord().getCustomerID());
 						System.out.println(((Apartment)existProperty).getRentalRecord().getDetails());						
