@@ -1,5 +1,4 @@
 package ap;
-import java.text.DecimalFormat;
 
 public class RentalRecord {
 
@@ -8,8 +7,8 @@ public class RentalRecord {
 	private String rentDate = "none"; 
 	private String estReDate = "none";
 	private String actReDate = "none";
-	private double rentalFee = 0.00;
-	private double lateFee = 0.00;
+	private String rentalFee = "0.00";
+	private String lateFee = "0.00";
 	
 	private String customerID;
 	
@@ -35,10 +34,10 @@ public class RentalRecord {
 	}
 	
 	public String toString() {
-	if(actReDate.equals("none")) { 
-		return getRecordId()+":"+getRentDate()+":"+getEstReDate()+":"+"none"+":"+"none"+":"+"none";
-	}
-	return getRecordId()+":"+getRentDate()+":"+getEstReDate()+":"+getActReDate()+":"+getRentalFee()+":"+getLateFee();
+		if(actReDate.equals("none")) { 
+			return getRecordId()+":"+getRentDate()+":"+getEstReDate()+":"+"none"+":"+"none"+":"+"none";
+		}
+		return getRecordId()+":"+getRentDate()+":"+getEstReDate()+":"+getActReDate()+":"+getRentalFee()+":"+getLateFee();
 	}
 
 	public String getDetails() {
@@ -52,19 +51,10 @@ public class RentalRecord {
 					String.format("%-30s%s", "Rent Date:", rentDate)+"\n"+
 					String.format("%-30s%s", "Estimated Return Date:", estReDate)+"\n"+
 					String.format("%-30s%s", "Actual Return Date:", actReDate)+"\n"+
-					String.format("%-30s%s", "Rental Fee:", twoDotDecimalDouble(rentalFee))+"\n"+
-					String.format("%-30s%s", "Late Fee:", twoDotDecimalDouble(lateFee));
+					String.format("%-30s%s", "Rental Fee:", rentalFee)+"\n"+
+					String.format("%-30s%s", "Late Fee:", lateFee);
 		}
 	}
-	
-
-	public String twoDotDecimalDouble(double s) {
-		DecimalFormat df = new DecimalFormat("#.00");
-		if(s==0) return "0.00";
-		return df.format(s);
-	}
-	
-	
 	
 	
 	public String[] getRentalRecords() {
@@ -87,19 +77,19 @@ public class RentalRecord {
 		return actReDate;
 	}
 
-	public double getRentalFee() {
+	public String getRentalFee() {
 		return rentalFee;
 	}
 
-	public void setRentalFee(double rentalFee) {
+	public void setRentalFee(String rentalFee) {
 		this.rentalFee = rentalFee;
 	}
 
-	public double getLateFee() {
+	public String getLateFee() {
 		return lateFee;
 	}
 
-	public void setLateFee(double lateFee) {
+	public void setLateFee(String lateFee) {
 		this.lateFee = lateFee;
 	}
 

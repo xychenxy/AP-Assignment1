@@ -5,27 +5,26 @@ public class Apartment extends RentalProperty {
 		super(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);
 	}
 	
-	public boolean rentDate(String customer, DateTime rentdate, int num) { // return true means it can be booked
+	public boolean rentDate(String customer, DateTime rentdate, int numOfRentDay) { // return true means it can be booked
 		
-		DateTime estimatRe = new DateTime(rentdate,num); // to create a estimate return days
+		DateTime estimatRe = new DateTime(rentdate,numOfRentDay); // to create a estimate return days
 		String etf = estimatRe.getFormattedDate();
 		String rtf = rentdate.getFormattedDate(); // 3. check the weekday with num
 		
 		if(!isPropertyStatus()) { // 1. check the status 
-			System.out.println("have been rented");
+			System.out.println("Sorry, this apartment has been rented.");
 			return false;
 		}
 		
-		if(!checkRentalDays(rtf)) return false; // rentdate should after current day
 		
 		if(calWeekday(rtf)==0) return false; // 0 means something go wrong;
 		if(calWeekday(rtf)==3 || calWeekday(rtf)==4) {// Friday and Sunday, more than 3 days
-			if(num<2) return false; 
+			if(numOfRentDay<2) return false; 
 		} 
 		else { // rest weekday, more than 2 day
-			if(num<1) return false;
+			if(numOfRentDay<1) return false;
 		}
-		if(num>29) { // 4. check the maximun rental days
+		if(numOfRentDay>29) { // 4. check the maximun rental days
 			System.out.println("the maximum rental days is 28");
 			return false;
 		}
@@ -45,17 +44,12 @@ public class Apartment extends RentalProperty {
 		String actuReDay = actuRe.getFormattedDate();
 		getRentalRecord().setActReDate(actuReDay); // update actually return date
 		
-		if(calIntervalDays(getRentalRecord().getRentDate(), actuReDay)<-1) { //  check for valid of return day
-			return false; // returnDate can not before than rentDate, but can the same day
+		if(calIntervalDays(getRentalRecord().getRentDate(), actuReDay)<-1 || calIntervalDays(getRentalRecord().getRentDate(), actuReDay)>=29) { //  check for valid of return day
+			System.out.println("Your return day cannot before than rental day, and maximum rental day is 28. And your rental day is: "+ getRentalRecord().getRentDate());
+			return false; // returnDate can not before than rentDate, but can be the same day
 		} 
-		
-		if(updateFee(actuReDay)[0]==updateFee(actuReDay)[1] && updateFee(actuReDay)[0] == -100) return false; // something go wrong
-		getRentalRecord().setRentalFee(feeApartment(updateFee(actuReDay)[0])); // update rental fee
-		getRentalRecord().setLateFee(lateFeeApartment(updateFee(actuReDay)[1])); //update late fee
-		
-		if(calIntervalDays(getRentalRecord().getRentDate(), actuReDay)>=29) return false;
-
-		
+	
+		feeApartment(calActAndLate(actuReDay)[0],calActAndLate(actuReDay)[1]); // update the fee
 		setPropertyStatus(true); // update property status, can be rented again 
 		getRentalRecord().updateRecord(); // update record
 		System.out.println("return success"); // can delete
@@ -72,18 +66,15 @@ public class Apartment extends RentalProperty {
 		return false;
 	} 
 	
-		
-	public double feeApartment(int n) { // n is num of bedrooms
+	public void feeApartment(int n1, int n2) { // update the actually rental fee and delay return fee
 		double p = 0.00;
 		if(getNumOfBedRoom()==1) p=143;
 		if(getNumOfBedRoom()==2) p=210;
 		if(getNumOfBedRoom()==3) p=319;
-		return n*p;
+		getRentalRecord().setRentalFee(keepTwoDotDecimal(n1*p));
+		getRentalRecord().setLateFee(keepTwoDotDecimal(n2*p));
 	}
 	
-	public double lateFeeApartment(int n) { // n is num of days
-		return feeApartment(n)*1.15;
-	}
 	
 	public String toString() { // property info
 		String s;
@@ -91,7 +82,6 @@ public class Apartment extends RentalProperty {
 		else s = "Rented";
 		return getPropertyId()+":"+getStrNum()+":"+getStrName()+":"+getSuburb()+":"+getPropertyType()+":"+getNumOfBedRoom()+":"+ s;
 	}
-	
 	
 	public String getDetails() {
 		String detail = String.format("%-30s%s", "Property ID:", getPropertyId())+"\n"+
