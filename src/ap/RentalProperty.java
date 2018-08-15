@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;;
 
 
-public abstract class RentalProperty {
+public class RentalProperty {
 	private String propertyId;
 	private String strName;
 	private String strNum;
@@ -31,19 +31,9 @@ public abstract class RentalProperty {
 		this(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);		
 	}
 	
-	
-	public abstract boolean rentDate(String customer, DateTime rentdate, int num);
-	
-	public abstract boolean returnDate(DateTime actuRe); 
-	
-	public abstract boolean performMaintenance(); 
-	
-	public abstract boolean completeMaintenance(DateTime completionDate);
-	
-	
-//	common methods
-	public int calWeekday(String day) { // 0 means something go wrong; 1 means Sunday;
-		int num = 0;
+		
+	public String calWeekday(String day) { // 0 means something go wrong; 1 means Sunday;
+		String[] weekday = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
 		SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
 		Calendar cal = Calendar.getInstance();
 		Date datet = null;
@@ -53,9 +43,8 @@ public abstract class RentalProperty {
 		}
 		catch (ParseException e) {
 			System.out.println("date fromat is wrong //calWeekday");
-			return num;
 		}
-		return cal.get(Calendar.DAY_OF_WEEK);
+		return weekday[cal.get(Calendar.DAY_OF_WEEK)];
 	}
 	
 	public int calIntervalDays(String before,String after){ // computer the interval day between before and after;
@@ -84,7 +73,7 @@ public abstract class RentalProperty {
 			compareDay[0] = temp1; // update rental fee
 			compareDay[1] = temp; //update late fee
 		}
-		else { //
+		else {
 			compareDay[0] = temp2; // update rental fee
 			compareDay[1] = 0; //update late fee
 		}

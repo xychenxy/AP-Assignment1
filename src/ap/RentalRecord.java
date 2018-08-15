@@ -27,6 +27,7 @@ public class RentalRecord {
 		recordId = propertyId+"_"+customer+"_"+tempStr;
 		for(int i=9;i>0;i--) { rentalRecords[i] = rentalRecords[i-1];} // change position and then update the first one record
 		rentalRecords[0] = recordId +":"+ rentDate +":"+ estReDate +":"+actReDate+":"+rentalFee+":"+lateFee;	
+		System.out.println(getDetails());
 	}
 	
 	public void updateRecord() {

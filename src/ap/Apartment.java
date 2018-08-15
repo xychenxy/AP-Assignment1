@@ -1,5 +1,5 @@
 package ap;
-public class Apartment extends RentalProperty {
+public class Apartment extends RentalProperty implements RentalAction{
 	
 	public Apartment(String propertyId,String strName,String strNum,String suburb,int numOfBedRoom,String propertyType) {
 		super(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);
@@ -16,18 +16,24 @@ public class Apartment extends RentalProperty {
 			return false;
 		}
 		
-		
-		if(calWeekday(rtf)==0) return false; // 0 means something go wrong;
-		if(calWeekday(rtf)==3 || calWeekday(rtf)==4) {// Friday and Sunday, more than 3 days
-			if(numOfRentDay<2) return false; 
-		} 
-		else { // rest weekday, more than 2 day
-			if(numOfRentDay<1) return false;
-		}
 		if(numOfRentDay>29) { // 4. check the maximun rental days
 			System.out.println("the maximum rental days is 28");
 			return false;
 		}
+		
+		if(calWeekday(rtf).equals("Friday") || calWeekday(rtf).equals("Saturday")) {// Friday and Sunday, more than 3 days
+			if(numOfRentDay<=2) {
+				System.out.println("Today is "+calWeekday(rtf)+". The minimum rental day is 3 days.");
+				return false; 
+			}
+		} 
+		else { // rest weekday, more than 2 day
+			if(numOfRentDay<=1) {
+				System.out.println("Today is "+calWeekday(rtf)+". The minimum rental day is 2 days.");
+				return false;
+			}
+		}
+		
 		
 		setPropertyStatus(false); // 5. false means can't be booked
 		getRentalRecord().createRecord(getPropertyId(), customer, rtf, etf); //  6. updating record array

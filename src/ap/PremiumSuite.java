@@ -1,6 +1,6 @@
 package ap;
 
-public class PremiumSuite extends RentalProperty {
+public class PremiumSuite extends RentalProperty implements RentalAction{
 	private DateTime maintainDate;
 	private String estMaintenanceDate;
 	private DateTime nextCompleteDate;
