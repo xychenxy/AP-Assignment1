@@ -1,5 +1,5 @@
 package ap;
-public class Apartment extends RentalProperty implements RentalAction{
+public class Apartment extends RentalProperty{
 	
 	public Apartment(String propertyId,String strName,String strNum,String suburb,int numOfBedRoom,String propertyType) {
 		super(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);
@@ -100,7 +100,7 @@ public class Apartment extends RentalProperty implements RentalAction{
 			
 			detail = detail +   
 					String.format("%-30s%s", "Status:", "Available")+"\n"+
-					String.format("%-30s%s", "RENTAL RECORD:", "empty")+"\n";
+					String.format("%-30s%s", "RENTAL RECORD:", "Empty")+"\n";
 			return detail;
 		}
 		

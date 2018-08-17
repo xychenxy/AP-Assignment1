@@ -1,6 +1,6 @@
 package ap;
 
-public class PremiumSuite extends RentalProperty implements RentalAction{
+public class PremiumSuite extends RentalProperty{
 	private DateTime maintainDate;
 	private String estMaintenanceDate;
 	private DateTime nextCompleteDate;
@@ -131,7 +131,7 @@ public class PremiumSuite extends RentalProperty implements RentalAction{
 			detail = detail +   
 					String.format("%-30s%s", "Status:", "Available")+"\n"+
 					String.format("%-30s%s", "Last maintenance:", maintainDate.getFormattedDate())+"\n"+
-					String.format("%-30s%s", "RENTAL RECORD:", "empty")+"\n";
+					String.format("%-30s%s", "RENTAL RECORD:", "Empty")+"\n";
 			return detail;
 		}
 		int k = 1;

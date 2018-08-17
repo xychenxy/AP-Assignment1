@@ -3,10 +3,10 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;;
+import java.util.Date;
 
 
-public class RentalProperty {
+public abstract class RentalProperty implements RentalAction{
 	private String propertyId;
 	private String strName;
 	private String strNum;
@@ -30,6 +30,14 @@ public class RentalProperty {
 	public RentalProperty(String propertyId, String strName, String strNum, String suburb, int numOfBedRoom, String propertyType, DateTime maintainDate) {
 		this(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);		
 	}
+	
+	public abstract boolean rentDate(String customer, DateTime rentdate, int numOfRentDay);
+	
+	public abstract boolean returnDate(DateTime actuRe);
+	
+	public abstract boolean performMaintenance();
+	
+	public abstract boolean completeMaintenance(DateTime completionDate);
 	
 		
 	public String calWeekday(String day) { // 0 means something go wrong; 1 means Sunday;

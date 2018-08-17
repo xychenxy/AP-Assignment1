@@ -103,6 +103,8 @@ public class FlexiRentSystem {
 				break;
 			}
 			
+			
+			
 			System.out.println("Please enter the Street name:");
 			String strName = console.nextLine();
 			
@@ -203,28 +205,15 @@ public class FlexiRentSystem {
 				System.out.println("The number must be large than 0");
 				break;
 			}
-
-			if(existProperty instanceof Apartment) {
-				if(((Apartment)existProperty).rentDate(customerId, rentDateTime, rentDayInt)) {
-					System.out.println(existProperty.getPropertyType()+" "+existProperty.getPropertyId()+" is now rented by customer "+customerId);
-					break;
-				}
-				else {
-					System.out.println(existProperty.getPropertyType()+" "+existProperty.getPropertyId()+" could not be rented. ");
-					break;
-				}
-			}
-			if(existProperty instanceof PremiumSuite) {
-				if(((PremiumSuite)existProperty).rentDate(customerId, rentDateTime, rentDayInt)) {
-					System.out.println(existProperty.getPropertyType()+" "+existProperty.getPropertyId()+" is now rented by customer "+customerId);
-					break;
-				}
-				else {
-					System.out.println(existProperty.getPropertyType()+" "+existProperty.getPropertyId()+" could not be rented. ");
-					break;
-				}
-			}
 			
+			if(existProperty.rentDate(customerId, rentDateTime, rentDayInt)) {
+				System.out.println(existProperty.getPropertyType()+" "+existProperty.getPropertyId()+" is now rented by customer "+customerId);
+				break;
+			}
+			else {
+				System.out.println(existProperty.getPropertyType()+" "+existProperty.getPropertyId()+" could not be rented. ");
+				break;
+			}
 		}
 	}
 	
@@ -250,29 +239,15 @@ public class FlexiRentSystem {
 			if(checkDate(returnDayStr)) returnDayTime = changeType(returnDayStr);
 			else break;
 			
-			if(existProperty instanceof Apartment) {
-				if(((Apartment)existProperty).returnDate(returnDayTime)) {
-					System.out.println(existProperty.getPropertyType()+" "+propertyId+" is returned by customer "+existProperty.getRentalRecord().getCustomerID());
-					System.out.println(existProperty.getRentalRecord().getDetails());						
-					break;
-				}
-				else {
-					System.out.println(existProperty.getPropertyType()+" "+propertyId+" could not be returned");
-					break;
-				}
+			if(existProperty.returnDate(returnDayTime)) {
+				System.out.println(existProperty.getPropertyType()+" "+propertyId+" is returned by customer "+existProperty.getRentalRecord().getCustomerID());
+				System.out.println(existProperty.getRentalRecord().getDetails());						
+				break;
 			}
-			if(existProperty instanceof PremiumSuite) {
-				if(((PremiumSuite)existProperty).returnDate(returnDayTime)) {
-					System.out.println(existProperty.getPropertyType()+" "+propertyId+" is returned by customer "+existProperty.getRentalRecord().getCustomerID());
-					System.out.println(existProperty.getRentalRecord().getDetails());						
-					break;
-				}
-				else {
-					System.out.println(existProperty.getPropertyType()+" "+propertyId+" could not be returned");
-					break;
-				}
-			}
-			
+			else {
+				System.out.println(existProperty.getPropertyType()+" "+propertyId+" could not be returned");
+				break;
+			}			
 		}
 	}
 	
@@ -286,20 +261,18 @@ public class FlexiRentSystem {
 				System.out.println("* * *  Rent a property: The property is not exist. * * *");
 				break;
 			}
-			else {
-				if(existProperty instanceof Apartment) {
-					System.out.println("Apartment do not have maintenance function.");
-					break;
-				}
-				if(((PremiumSuite)existProperty).performMaintenance()) { // true means can go to maintain
-					System.out.println(existProperty.getPropertyType()+" "+propertyId+" is now under maintainance ");
-					break;
-				}
-				else {
-					System.out.println(existProperty.getPropertyType()+" "+propertyId+" could not be maintainance");
-					break;
-				}
+			if(existProperty instanceof Apartment) {
+				System.out.println("Apartment do not have maintenance function.");
+				break;
 			}
+			if(existProperty.performMaintenance()) { // true means can go to maintain
+				System.out.println(existProperty.getPropertyType()+" "+propertyId+" is now under maintainance ");
+				break;
+			}
+			else {
+				System.out.println(existProperty.getPropertyType()+" "+propertyId+" could not be maintainance");
+				break;
+			}				
 		}
 	}
 	
