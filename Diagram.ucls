@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="ap.Apartment" project="AP-Assignment1" 
     file="/AP-Assignment1/src/ap/Apartment.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="209" width="276" x="348" y="1075"/>    
+    <position height="209" width="276" x="-58" y="1217"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="ap.PremiumSuite" project="AP-Assignment1" 
     file="/AP-Assignment1/src/ap/PremiumSuite.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="245" width="351" x="664" y="1075"/>    
+    <position height="209" width="351" x="258" y="1217"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="ap.StartUp" project="AP-Assignment1" file="/AP-Assignment1/src/ap/StartUp.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="101" width="124" x="113" y="37"/>    
+    <position height="101" width="124" x="246" y="-19"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,78 +30,99 @@
   </class>  
   <class id="4" language="java" name="ap.RentalProperty" project="AP-Assignment1" 
     file="/AP-Assignment1/src/ap/RentalProperty.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="569" width="356" x="348" y="466"/>    
+    <position height="731" width="356" x="714" y="446"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="ap.RentalRecord" project="AP-Assignment1" 
+  <interface id="5" language="java" name="ap.RentalAction" project="AP-Assignment1" 
+    file="/AP-Assignment1/src/ap/RentalAction.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="137" width="250" x="649" y="1217"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="ap.RentalRecord" project="AP-Assignment1" 
     file="/AP-Assignment1/src/ap/RentalRecord.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="497" width="267" x="41" y="1075"/>    
+    <position height="461" width="267" x="939" y="1217"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="ap.DateTime" project="AP-Assignment1" file="/AP-Assignment1/src/ap/DateTime.java" 
+  <class id="7" language="java" name="ap.DateTime" project="AP-Assignment1" file="/AP-Assignment1/src/ap/DateTime.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="317" width="200" x="664" y="1612"/>    
+    <position height="317" width="200" x="1246" y="1217"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="ap.FlexiRentSystem" project="AP-Assignment1" 
+  <class id="8" language="java" name="ap.FlexiRentSystem" project="AP-Assignment1" 
     file="/AP-Assignment1/src/ap/FlexiRentSystem.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="389" width="293" x="348" y="37"/>    
+    <position height="425" width="338" x="714" y="-19"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="8">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="9" name="maintainDate"/>      
-      <multiplicity id="10" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
+  <generalization id="9">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <realization id="10">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
   <association id="11">    
     <end type="SOURCE" refId="4" navigable="false">      
       <attribute id="12" name="rentalRecord"/>      
       <multiplicity id="13" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="14">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="15" name="existProperty"/>      
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="15" name="nextCompleteDate"/>      
       <multiplicity id="16" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="18" name="existProperty"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="17">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="4"/>  
-  </generalization>  
-  <generalization id="18">    
+  <generalization id="20">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="4"/>  
   </generalization>  
-  <association id="19">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="20" name="nextCompleteDate"/>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
+  <association id="21">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="22" name="flexiProperty"/>      
+      <multiplicity id="23" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="24">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="25" name="maintainDate"/>      
+      <multiplicity id="26" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

@@ -6,6 +6,7 @@ public class StartUp {
 		
 		FlexiRentSystem f1 = new FlexiRentSystem();
 		f1.runMenu();
+
 		
 	} 
 	

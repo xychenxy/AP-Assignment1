@@ -59,9 +59,7 @@ public class FlexiRentSystem {
 	public boolean checkRepeatProperty(String propertyId) {
 		boolean check = true;
 		for(int i=0;i<flexiProperty.length;i++) {
-			if(flexiProperty[i]==null) {
-				break;
-			}
+			if(flexiProperty[i]==null) break;
 			else if (flexiProperty[i].getPropertyId().equals(propertyId)) {
 				check = false;
 				break;
@@ -74,6 +72,7 @@ public class FlexiRentSystem {
 		for(int i=0;i<flexiProperty.length;i++) {
 			if(flexiProperty[i]==null) {
 				flexiProperty[i] = A;
+				System.out.println("\n"+"The property has created successful"+"\n");
 				break;
 			}		
 		}
@@ -97,8 +96,59 @@ public class FlexiRentSystem {
 		for(int i=0;i<suburbList.length;i++) id = id + suburbList[i].toUpperCase().charAt(0);
 		return id;
 	}
-		
-	public void addProperty(Scanner console) {
+	
+	
+	public void addApartment(Scanner console, String strNum, String strName, String suburb,String propertyType) {
+		while(true) {
+			System.out.println("Please enter the Number of bedrooms:  1 or 2 or 3");
+			String typeRoom = console.nextLine(); 
+			int numOfBedRoom;
+			try {numOfBedRoom = Integer.parseInt(typeRoom);} /// To check input value is valid.
+			catch (NumberFormatException e) {	        	
+				System.out.println("* * *  NumOfBedRooms: The input format is error. * * *");
+	    			break;
+			}
+			
+			if(numOfBedRoom<=0 || numOfBedRoom>=4) {
+				System.out.println("* * *  NumOfBedRooms: out of range  * * *");
+				break;
+			}
+			
+			propertyId = createPropertyId("A_",strNum,strName,suburb);
+			if(!checkRepeatProperty(propertyId)) {
+				System.out.println("this property has already exit");
+				break;
+			}
+			Apartment A = new Apartment(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);
+			storeProperty(A);
+			System.out.println(A.getDetails());
+			break;
+		}
+	}
+	
+	public void addPremiumSuite(Scanner console, String strNum, String strName, String suburb,String propertyType) {
+		while(true) {
+			System.out.println("Enter LastMaintainDate Like 14/02/2018 (dd/MM/yyyy);  Tip: Maintenance date should before today");
+			String maintainDate = console.nextLine();
+			if(checkDayForMaintenance(maintainDate)){
+				
+				propertyId = createPropertyId("S_",strNum,strName,suburb);
+				if(!checkRepeatProperty(propertyId)) {
+					System.out.println("this property has already exit");
+					break;
+				}
+				PremiumSuite P = new PremiumSuite(propertyId, strName, strNum, suburb, 3, propertyType, changeType(maintainDate));
+				storeProperty(P);
+				System.out.println(P.getDetails());
+				break;
+			}
+			else break;
+		}
+	}
+	
+	
+
+	public void addProperty(Scanner console) {	
 		while(true){
 			if(flexiProperty[49]!=null) {
 				System.out.println("We have already 50 both Apartment and Premium Suite, please don't add property.");
@@ -130,61 +180,18 @@ public class FlexiRentSystem {
 					System.out.println("*** The input format is error. ***");
 					break;
 			}
-			if(propertyType.equals("1")|| propertyType.equals("2") ) {
-				if(propertyType.equals("1")) propertyType = "Apartment";
-				if(propertyType.equals("2")) propertyType = "Premium Suite";
+			
+			if(propertyType.equals("1")) {
+				addApartment(console, strNum, strName, suburb, "Apartment");
+				break;
+			}
+			else if (propertyType.equals("2")) {
+				addPremiumSuite(console, strNum, strName, suburb, "Premium Suite");
+				break;
 			}
 			else {
 				System.out.println("*** The input format is error. ***");
 				break;
-			}
-			
-			if(propertyType.equals("Apartment")) {
-				
-				System.out.println("Please enter the Number of bedrooms:  1 or 2 or 3, Premium Suite has only 3 bedrooms");
-				String typeRoom = console.nextLine(); 
-				int numOfBedRoom;
-				try {numOfBedRoom = Integer.parseInt(typeRoom);} /// To check input value is valid.
-				catch (NumberFormatException e) {	        	
-		    			System.out.println("* * *  NumOfBedRooms: The input format is error. * * *");
-		    			break;
-				}
-				
-				if(numOfBedRoom<=0 || numOfBedRoom>=4) {
-					System.out.println("* * *  NumOfBedRooms: out of range  * * *");
-					break;
-				}
-				
-				propertyId = createPropertyId("A_",strNum,strName,suburb);
-				if(!checkRepeatProperty(propertyId)) {
-					System.out.println("this property has already exit");
-					break;
-				}
-				Apartment A = new Apartment(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);
-				storeProperty(A);
-				System.out.println("\n"+"The Apartment property has created successful: " + "\n");
-				System.out.println(A.getDetails());
-				break;
-			}
-			
-			if(propertyType.equals("Premium Suite")) {
-				System.out.println("Enter Premium Suite LastMaintainDate Like 14/02/2018 (dd/MM/yyyy); "+"\n"+
-								"Tip: Maintenance date should before today");
-				String maintainDate = console.nextLine();
-				if(checkDayForMaintenance(maintainDate)){
-					propertyId = createPropertyId("S_",strNum,strName,suburb);
-					if(!checkRepeatProperty(propertyId)) {
-						System.out.println("this property has already exit");
-						break;
-					}
-					DateTime lastMaintainDate = changeType(maintainDate);
-					PremiumSuite P = new PremiumSuite(propertyId, strName, strNum, suburb, 3, propertyType, lastMaintainDate);
-					storeProperty(P);
-					System.out.println("\n"+"The Premium Suite property has created successful"+"\n");
-					System.out.println(P.getDetails());
-					break;
-				}
-				else break;
 			}
 		}
 	}
@@ -316,7 +323,6 @@ public class FlexiRentSystem {
 			if(checkDate(compltMainStr)) compltMainTime = changeType(compltMainStr);
 			else break;
 			
-
 			if(((PremiumSuite)existProperty).completeMaintenance(compltMainTime)) { // true means complete maintenance
 				System.out.println(existProperty.getPropertyType()+" "+propertyId+" has all maintenance completed and ready for rent ");
 				break;
@@ -345,9 +351,7 @@ public class FlexiRentSystem {
 	}
 	
 	public void runMenu() {
-		
 		Scanner console = new Scanner(System.in);
-		
 		while(true){
 			System.out.println("\n"+"\n"+"**** FLEXIRENT SYSTEM MENU ****");
 			System.out.println(String.format("%-30s%s", "Add Property:", 1));

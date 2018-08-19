@@ -97,7 +97,6 @@ public class Apartment extends RentalProperty{
 	
 	
 		if(getRentalRecord().getRentalRecords()[0]==null) { // only check for property without any rental record
-			
 			detail = detail +   
 					String.format("%-30s%s", "Status:", "Available")+"\n"+
 					String.format("%-30s%s", "RENTAL RECORD:", "Empty")+"\n";
@@ -115,6 +114,7 @@ public class Apartment extends RentalProperty{
 				String.format("%-30s%s", "Status:", "Rented")+"\n"+
 				getPartofRecrod(getRentalRecord().getRentalRecords()[0]);} // have been rented
 	
+		
 		for(int i = k;i<getRentalRecord().getRentalRecords().length;i++) {
 			if(getRentalRecord().getRentalRecords()[i]==null) break; // if record is empty, over
 			detail = detail + "\n" +getRecordDatails(getRentalRecord().getRentalRecords()[i])+"\n"; // handle each record

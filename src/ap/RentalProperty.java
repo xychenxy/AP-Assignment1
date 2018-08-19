@@ -15,6 +15,11 @@ public abstract class RentalProperty implements RentalAction{
 	private String propertyType;
 	private boolean propertyStatus = true;
 	private RentalRecord rentalRecord = new RentalRecord();
+	
+	private DateTime maintainDate;
+	private String estMaintenanceDate;
+	private DateTime nextCompleteDate;
+	private boolean maintainStatus = true;
 		
 	
 	
@@ -25,10 +30,12 @@ public abstract class RentalProperty implements RentalAction{
 		this.suburb = suburb;
 		this.numOfBedRoom = numOfBedRoom;
 		this.propertyType = propertyType;
-	
 	}
+	
 	public RentalProperty(String propertyId, String strName, String strNum, String suburb, int numOfBedRoom, String propertyType, DateTime maintainDate) {
 		this(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);		
+		this.maintainDate = maintainDate;
+		this.nextCompleteDate = new DateTime(maintainDate,10);
 	}
 	
 	public abstract boolean rentDate(String customer, DateTime rentdate, int numOfRentDay);
@@ -142,5 +149,27 @@ public abstract class RentalProperty implements RentalAction{
 	}
 	public RentalRecord getRentalRecord() {
 		return rentalRecord;
+	}
+	public DateTime getMaintainDate() {
+		return maintainDate;
+	}
+	public void setMaintainDate(DateTime maintainDate) {
+		this.maintainDate = maintainDate;
+	}
+	public String getEstMaintenanceDate() {
+		return estMaintenanceDate;
+	}
+	public void setEstMaintenanceDate(String estMaintenanceDate) {
+		this.estMaintenanceDate = estMaintenanceDate;
+	}
+	public DateTime getNextCompleteDate() {
+		return nextCompleteDate;
+	}
+	public boolean isMaintainStatus() {
+		return maintainStatus;
+	}
+	public void setMaintainStatus(boolean maintainStatus) {
+		this.maintainStatus = maintainStatus;
 	} 
+	
 }

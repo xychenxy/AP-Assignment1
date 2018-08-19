@@ -36,9 +36,9 @@ public class RentalRecord {
 	
 	public String toString() {
 		if(actReDate.equals("none")) { 
-			return getRecordId()+":"+getRentDate()+":"+getEstReDate()+":"+"none"+":"+"none"+":"+"none";
+			return recordId+":"+rentDate+":"+estReDate+":"+"none"+":"+"none"+":"+"none";
 		}
-		return getRecordId()+":"+getRentDate()+":"+getEstReDate()+":"+getActReDate()+":"+getRentalFee()+":"+getLateFee();
+		return recordId+":"+rentDate+":"+estReDate+":"+actReDate+":"+rentalFee+":"+lateFee;
 	}
 
 	public String getDetails() {
@@ -78,16 +78,8 @@ public class RentalRecord {
 		return actReDate;
 	}
 
-	public String getRentalFee() {
-		return rentalFee;
-	}
-
 	public void setRentalFee(String rentalFee) {
 		this.rentalFee = rentalFee;
-	}
-
-	public String getLateFee() {
-		return lateFee;
 	}
 
 	public void setLateFee(String lateFee) {
