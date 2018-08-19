@@ -56,6 +56,20 @@ public class FlexiRentSystem {
 		return str;
 	}
 	
+	public boolean checkRepeatProperty(String propertyId) {
+		boolean check = true;
+		for(int i=0;i<flexiProperty.length;i++) {
+			if(flexiProperty[i]==null) {
+				break;
+			}
+			else if (flexiProperty[i].getPropertyId().equals(propertyId)) {
+				check = false;
+				break;
+			}
+		}
+		return check;
+	}
+	
 	public void storeProperty(RentalProperty A) {
 		for(int i=0;i<flexiProperty.length;i++) {
 			if(flexiProperty[i]==null) {
@@ -103,8 +117,6 @@ public class FlexiRentSystem {
 				break;
 			}
 			
-			
-			
 			System.out.println("Please enter the Street name:");
 			String strName = console.nextLine();
 			
@@ -127,40 +139,46 @@ public class FlexiRentSystem {
 				break;
 			}
 			
-			System.out.println("Please enter the Number of bedrooms:  1 or 2 or 3, Premium Suite has only 3 bedrooms");
-			String typeRoom = console.nextLine(); 
-			int numOfBedRoom;
-			try {numOfBedRoom = Integer.parseInt(typeRoom);} /// To check input value is valid.
-			catch (NumberFormatException e) {	        	
-	    			System.out.println("* * *  NumOfBedRooms: The input format is error. * * *");
-	    			break;
-			}
 			if(propertyType.equals("Apartment")) {
+				
+				System.out.println("Please enter the Number of bedrooms:  1 or 2 or 3, Premium Suite has only 3 bedrooms");
+				String typeRoom = console.nextLine(); 
+				int numOfBedRoom;
+				try {numOfBedRoom = Integer.parseInt(typeRoom);} /// To check input value is valid.
+				catch (NumberFormatException e) {	        	
+		    			System.out.println("* * *  NumOfBedRooms: The input format is error. * * *");
+		    			break;
+				}
+				
 				if(numOfBedRoom<=0 || numOfBedRoom>=4) {
 					System.out.println("* * *  NumOfBedRooms: out of range  * * *");
 					break;
 				}
 				
 				propertyId = createPropertyId("A_",strNum,strName,suburb);
+				if(!checkRepeatProperty(propertyId)) {
+					System.out.println("this property has already exit");
+					break;
+				}
 				Apartment A = new Apartment(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType);
 				storeProperty(A);
 				System.out.println("\n"+"The Apartment property has created successful: " + "\n");
 				System.out.println(A.getDetails());
 				break;
 			}
+			
 			if(propertyType.equals("Premium Suite")) {
-				if(numOfBedRoom!=3) {
-					System.out.println("* * *  NumOfBedRooms: Premium Suite has only 3 bedrooms  * * *");
-					break;
-				}
-				
 				System.out.println("Enter Premium Suite LastMaintainDate Like 14/02/2018 (dd/MM/yyyy); "+"\n"+
 								"Tip: Maintenance date should before today");
 				String maintainDate = console.nextLine();
 				if(checkDayForMaintenance(maintainDate)){
 					propertyId = createPropertyId("S_",strNum,strName,suburb);
+					if(!checkRepeatProperty(propertyId)) {
+						System.out.println("this property has already exit");
+						break;
+					}
 					DateTime lastMaintainDate = changeType(maintainDate);
-					PremiumSuite P = new PremiumSuite(propertyId, strName, strNum, suburb, numOfBedRoom, propertyType, lastMaintainDate);
+					PremiumSuite P = new PremiumSuite(propertyId, strName, strNum, suburb, 3, propertyType, lastMaintainDate);
 					storeProperty(P);
 					System.out.println("\n"+"The Premium Suite property has created successful"+"\n");
 					System.out.println(P.getDetails());
