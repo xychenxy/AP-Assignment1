@@ -16,20 +16,20 @@ public class Apartment extends RentalProperty{
 			return false;
 		}
 		
-		if(numOfRentDay>29) { // 4. check the maximun rental days
+		if(numOfRentDay>=29) { // 4. check the maximun rental days
 			System.out.println("the maximum rental days is 28");
 			return false;
 		}
 		
-		if(calWeekday(rtf).equals("Friday") || calWeekday(rtf).equals("Saturday")) {// Friday and Sunday, more than 3 days
+		if(calWeekday(rtf)==4 || calWeekday(rtf)==5) {// Friday and Sunday, more than 3 days
 			if(numOfRentDay<=2) {
-				System.out.println("Today is "+calWeekday(rtf)+". The minimum rental day is 3 days.");
+				System.out.println("From Friday to Saturday, the minimum rental day is 3 days.");
 				return false; 
 			}
 		} 
 		else { // rest weekday, more than 2 day
 			if(numOfRentDay<=1) {
-				System.out.println("Today is "+calWeekday(rtf)+". The minimum rental day is 2 days.");
+				System.out.println("From Sunday to Thursday the minimum rental day is 2 days.");
 				return false;
 			}
 		}
@@ -58,18 +58,23 @@ public class Apartment extends RentalProperty{
 		feeApartment(calActAndLate(actuReDay)[0],calActAndLate(actuReDay)[1]); // update the fee
 		setPropertyStatus(true); // update property status, can be rented again 
 		getRentalRecord().updateRecord(); // update record
-		System.out.println("return success"); // can delete
 		return true;
 	}
 	
-	public boolean performMaintenance() {
-		System.out.println("Apartment do not support maintenance now");
-		return false;
-	} 
 	
 	public boolean completeMaintenance(DateTime completionDate) {
-		System.out.println("Apartment do not support maintenance now");
-		return false;
+		if(!isPropertyStatus()) {
+			System.out.println("Apartment is being rented, no allow to perform maintenance");
+			return false;
+		}
+		
+		if(ismaintenance()) {
+			System.out.println("sorry, Apartment haven't performed maintenance, no allow complete maintenance");
+			return false;
+		}
+		
+		setmaintenance(true);
+		return true;
 	} 
 	
 	public void feeApartment(int n1, int n2) { // update the actually rental fee and delay return fee
@@ -90,15 +95,15 @@ public class Apartment extends RentalProperty{
 	}
 	
 	public String getDetails() {
-		String detail = String.format("%-30s%s", "Property ID:", getPropertyId())+"\n"+
-						String.format("%-30s%s", "Address:", getStrNum()+" "+getStrName()+" "+getSuburb())+"\n"+
-						String.format("%-30s%s", "Type:", getPropertyType())+"\n"+
-						String.format("%-30s%s", "Bedroom:", getNumOfBedRoom())+"\n";
-	
+		String status;
+		if(isPropertyStatus()) status = "Available";
+		else status = "Rented";
+		
+		String detail = getBasicPropertyInfo();
 	
 		if(getRentalRecord().getRentalRecords()[0]==null) { // only check for property without any rental record
 			detail = detail +   
-					String.format("%-30s%s", "Status:", "Available")+"\n"+
+					String.format("%-30s%s", "Status:", status)+"\n"+
 					String.format("%-30s%s", "RENTAL RECORD:", "Empty")+"\n";
 			return detail;
 		}
@@ -107,19 +112,18 @@ public class Apartment extends RentalProperty{
 		if(isPropertyStatus()) { // only check for the first one record, true mean can rent
 			 k=0;
 			detail = detail + 
-					String.format("%-30s%s", "Status:", "Available")+"\n"+
+					String.format("%-30s%s", "Status:", status)+"\n"+
 					"------------------------------------------------------";			
 		}
 		else { detail = detail+
-				String.format("%-30s%s", "Status:", "Rented")+"\n"+
-				getPartofRecrod(getRentalRecord().getRentalRecords()[0]);} // have been rented
-	
+				String.format("%-30s%s", "Status:", status)+"\n"+
+				getRecordDatails(getRentalRecord().getRentalRecords()[0],3); // have been rented
+		} 
 		
 		for(int i = k;i<getRentalRecord().getRentalRecords().length;i++) {
 			if(getRentalRecord().getRentalRecords()[i]==null) break; // if record is empty, over
-			detail = detail + "\n" +getRecordDatails(getRentalRecord().getRentalRecords()[i])+"\n"; // handle each record
+			detail = detail + "\n" +getRecordDatails(getRentalRecord().getRentalRecords()[i],6)+"\n"; // handle each record
 		}
-		
 		return detail;
 	}
 	

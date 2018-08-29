@@ -15,9 +15,9 @@ public class PremiumSuite extends RentalProperty{
 			return false;
 		}
 		
-		if(!isMaintainStatus()) {
+		if(!ismaintenance()) {
 			System.out.println("The Premium Suite is under maintenance.");
-			return false; // !maintainStatus means under maintain
+			return false; // !maintenance means under maintain
 		}
 						
 		if( !(calIntervalDays(estimatRe.getFormattedDate(), getNextCompleteDate().getFormattedDate())>0)) {
@@ -40,7 +40,7 @@ public class PremiumSuite extends RentalProperty{
 		String actuReturnDay = actuRe.getFormattedDate();
 		getRentalRecord().setActReDate(actuReturnDay); 
 		
-		if(!isMaintainStatus()) {// below handle under maintain, 
+		if(!ismaintenance()) {// below handle under maintain, 
 			if(calIntervalDays(actuReturnDay, getEstMaintenanceDate())<=0) {
 				System.out.println("Sorry, you cannot return the premium suite over the maintenance day.");
 				return false;
@@ -61,42 +61,30 @@ public class PremiumSuite extends RentalProperty{
 		feePremiumSuite(calActAndLate(actuReturnDay)[0],calActAndLate(actuReturnDay)[1]); // update the fee
 		setPropertyStatus(true); 
 		getRentalRecord().updateRecord(); 
-		System.out.println("return success"); 
 		return true;
 	}
 	
-	public boolean performMaintenance() {  
-		if(!isPropertyStatus()) {
-			System.out.println("The Premium Suite is being rented, no allow to perform maintenance.");
-			return false; 
-		}
-		if(!isMaintainStatus()) {
-			System.out.println("The Premium Suite is under maintenance.");
-			return false; 
-		}
-		DateTime today = new DateTime();
-		
-		setEstMaintenanceDate(today.getFormattedDate());
-		setMaintainStatus(false); 
-		return true; // return true mean under maintain
-	}
 	
 	public boolean completeMaintenance(DateTime completionDate) {
+		int intervalDay1;
+		int intervalDay2;
 		if(!isPropertyStatus()) {
 			System.out.println("The Premium Suite is being rented, no allow to complete maintenance.");
 			return false;
 		}
-		if(isMaintainStatus()) {
+		if(ismaintenance()) {
 			System.out.println("The Premium Suite is no under maintenance. pls perform maintenance at first.");
 			return false; 
 		}
 		
-		if(calIntervalDays(getEstMaintenanceDate(), completionDate.getFormattedDate())<0 || calIntervalDays(completionDate.getFormattedDate(), getNextCompleteDate().getFormattedDate())<0){
+		intervalDay1 = calIntervalDays(getEstMaintenanceDate(), completionDate.getFormattedDate());
+		intervalDay2 = calIntervalDays(completionDate.getFormattedDate(), getNextCompleteDate().getFormattedDate());
+		if(intervalDay1<0 || intervalDay2<0){
 			System.out.println("complete maintenance day should between perform maintenance day and the next complete maintenance day.");
 			return false; 
 		}
 		
-		setMaintainStatus(true);
+		setmaintenance(true);
 		setMaintainDate(completionDate);
 		return true;
 	}
@@ -112,15 +100,20 @@ public class PremiumSuite extends RentalProperty{
 		String status;
 		if(isPropertyStatus()) status = "Available";
 		else status = "Rented";
-		if(!isMaintainStatus()) status = "Under Maintenance";
+		if(!ismaintenance()) status = "Under Maintenance";
 		return getPropertyId()+":"+getStrNum()+":"+getStrName()+":"+getSuburb()+":"+getPropertyType()+":"+getNumOfBedRoom()+":"+status+":"+getMaintainDate().getFormattedDate();
 	}
 	
 	public String getDetails() {
-		String detail = String.format("%-30s%s", "Property ID:", getPropertyId())+"\n"+
-				String.format("%-30s%s", "Address:", getStrNum()+" "+getStrName()+" "+getSuburb())+"\n"+
-				String.format("%-30s%s", "Type:", getPropertyType())+"\n"+
-				String.format("%-30s%s", "Bedroom:", getNumOfBedRoom())+"\n";
+		int k = 1;
+		String status;
+		if(isPropertyStatus()) {
+			status = "Available";
+			k = 0;
+		}
+		else status = "Rented";
+		if(!ismaintenance()) status = "Under Maintenance";
+		String detail = getBasicPropertyInfo();
                 
 		if(getRentalRecord().getRentalRecords()[0]==null) { // only check for property without any rental record
 			detail = detail +   
@@ -130,27 +123,22 @@ public class PremiumSuite extends RentalProperty{
 			return detail;
 		}
 		
-		int k = 1;
 		if(isPropertyStatus()) { // only check for the first one record, true mean can rent
-			k = 0;
 			detail = detail + 
-					String.format("%-30s%s", "Status:", "Available")+"\n"+
+					String.format("%-30s%s", "Status:", status)+"\n"+
 					String.format("%-30s%s", "Last maintenance:", getMaintainDate().getFormattedDate())+"\n"+
 					"----------------------------------------------";
-				
 		}
 		else { detail = detail + 
-				String.format("%-30s%s", "Status:", "Rented")+"\n"+
+				String.format("%-30s%s", "Status:", status)+"\n"+
 				String.format("%-30s%s", "Last maintenance:", getMaintainDate().getFormattedDate())+"\n"+
-				getPartofRecrod(getRentalRecord().getRentalRecords()[0]);} // have been rented
-		
+				getRecordDatails(getRentalRecord().getRentalRecords()[0],3);} // have been rented
 		
 		for(int i = k;i<getRentalRecord().getRentalRecords().length;i++) {
 			if(getRentalRecord().getActReDate()=="none" && getRentalRecord().getRentalRecords()[1]==null) break;
 			if(getRentalRecord().getRentalRecords()[i]==null) break; // if record is empty, over
-			detail = detail +"\n" + getRecordDatails(getRentalRecord().getRentalRecords()[i])+"\n"; // handle each record
+			detail = detail +"\n" + getRecordDatails(getRentalRecord().getRentalRecords()[i],6)+"\n"; // handle each record
 		}
-		
 		return detail;
 	}
 

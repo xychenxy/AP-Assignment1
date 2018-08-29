@@ -3,13 +3,12 @@ package ap;
 public class RentalRecord {
 
 	private String[] rentalRecords;
-	private String recordId = "none";
-	private String rentDate = "none"; 
-	private String estReDate = "none";
+	private String recordId;
+	private String rentDate; 
+	private String estReDate;
 	private String actReDate = "none";
-	private String rentalFee = "0.00";
-	private String lateFee = "0.00";
-	
+	private String rentalFee;
+	private String lateFee;
 	private String customerID;
 	
 	

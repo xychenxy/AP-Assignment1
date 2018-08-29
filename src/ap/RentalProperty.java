@@ -16,10 +16,10 @@ public abstract class RentalProperty implements RentalAction{
 	private boolean propertyStatus = true;
 	private RentalRecord rentalRecord = new RentalRecord();
 	
-	private DateTime maintainDate;
-	private String estMaintenanceDate;
-	private DateTime nextCompleteDate;
-	private boolean maintainStatus = true;
+	private DateTime maintainDate;  // for premium suite, to store the last maintain date 
+	private String estMaintenanceDate; // when calling perform method, create today date and store into it.
+	private DateTime nextCompleteDate; // for premium suite, to store the next complete date; 
+	private boolean maintenance = true; // this mean this property can be performed maintenance
 		
 	
 	
@@ -41,14 +41,29 @@ public abstract class RentalProperty implements RentalAction{
 	public abstract boolean rentDate(String customer, DateTime rentdate, int numOfRentDay);
 	
 	public abstract boolean returnDate(DateTime actuRe);
-	
-	public abstract boolean performMaintenance();
-	
+		
 	public abstract boolean completeMaintenance(DateTime completionDate);
 	
 		
-	public String calWeekday(String day) { // 0 means something go wrong; 1 means Sunday;
-		String[] weekday = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+	public boolean performMaintenance() {
+		if(!isPropertyStatus()) {
+			System.out.println("\n cannot be perform maintenane, as being rented \n");
+			return false;
+		}
+		
+		if(!ismaintenance()) {
+			System.out.println("\n cannot be perform maintenane, as has been under maintenance \n");
+			return false;
+		}
+		
+		DateTime today = new DateTime();
+		setEstMaintenanceDate(today.getFormattedDate());
+		
+		setmaintenance(false);
+		return true;
+	} 
+	
+	public int calWeekday(String day) {  // calculate the weekend day.
 		SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
 		Calendar cal = Calendar.getInstance();
 		Date datet = null;
@@ -59,10 +74,10 @@ public abstract class RentalProperty implements RentalAction{
 		catch (ParseException e) {
 			System.out.println("date fromat is wrong //calWeekday");
 		}
-		return weekday[cal.get(Calendar.DAY_OF_WEEK)];
+		return cal.get(Calendar.DAY_OF_WEEK);
 	}
 	
-	public int calIntervalDays(String before,String after){ // computer the interval day between before and after;
+	public int calIntervalDays(String before,String after){ // return value is (after - before), is used to computer interval days.
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date bDate = null;
 		Date aDate = null;
@@ -102,24 +117,28 @@ public abstract class RentalProperty implements RentalAction{
 		if(s==0) return "0.00";
 		return df.format(s);
 	}
-	
-	public String getPartofRecrod(String r) {
-		String[] s = r.split(":");
-		return  String.format("%-30s%s", "Record ID:", s[0])+"\n"+
-				String.format("%-30s%s", "Rent Date:", s[1])+"\n"+
-				String.format("%-30s%s", "Estimated Return Date:", s[2])+"\n"+
-				"----------------------------------------------";
+		
+	public String getRecordDatails(String str,int i) {// record info; i is 3 or 6 
+		String[] s = str.split(":");	
+		String detail = "please attention to value of i";
+		String former =  String.format("%-30s%s", "Record ID:", s[0])+"\n"+
+						String.format("%-30s%s", "Rent Date:", s[1])+"\n"+
+						String.format("%-30s%s", "Estimated Return Date:", s[2])+"\n";
+		String later =  String.format("%-30s%s", "Actual Return Date:", s[3])+"\n"+
+						String.format("%-30s%s", "Rental Fee:", s[4])+"\n"+
+						String.format("%-30s%s", "Late Fee:", s[5])+"\n";
+		if(i==3) detail = former;
+		if(i==6) detail = former + later;
+		return detail + "\n" +
+			"----------------------------------------------";
 	}
 	
-	public String getRecordDatails(String r) {// record info
-		String[] s = r.split(":");		
-		return  String.format("%-30s%s", "Record ID:", s[0])+"\n"+
-			String.format("%-30s%s", "Rent Date:", s[1])+"\n"+
-			String.format("%-30s%s", "Estimated Return Date:", s[2])+"\n"+
-			String.format("%-30s%s", "Actual Return Date:", s[3])+"\n"+
-			String.format("%-30s%s", "Rental Fee:", s[4])+"\n"+
-			String.format("%-30s%s", "Late Fee:", s[5])+"\n"+
-			"----------------------------------------------";
+	public String getBasicPropertyInfo() {
+		String detail = String.format("%-30s%s", "Property ID:", getPropertyId())+"\n"+
+				String.format("%-30s%s", "Address:", getStrNum()+" "+getStrName()+" "+getSuburb())+"\n"+
+				String.format("%-30s%s", "Type:", getPropertyType())+"\n"+
+				String.format("%-30s%s", "Bedroom:", getNumOfBedRoom())+"\n";
+		return  detail;
 	}
 	
 	
@@ -165,11 +184,11 @@ public abstract class RentalProperty implements RentalAction{
 	public DateTime getNextCompleteDate() {
 		return nextCompleteDate;
 	}
-	public boolean isMaintainStatus() {
-		return maintainStatus;
+	public boolean ismaintenance() {
+		return maintenance;
 	}
-	public void setMaintainStatus(boolean maintainStatus) {
-		this.maintainStatus = maintainStatus;
+	public void setmaintenance(boolean maintenance) {
+		this.maintenance = maintenance;
 	} 
 	
 }
